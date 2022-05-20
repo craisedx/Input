@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Input</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+     <link rel="stylesheet" href="~/lib/Kendo/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="~/lib/Kendo/styles/kendo.bootstrap-vintage.min.css"/>
+    <script src="~/lib/Kendo/js/jquery.min.js"></script>
+        <script src="~/lib/Kendo/js/kendo.all.min.js"></script>
+        <script src="~/lib/Kendo/js/kendo.timezones.min.js"></script>
+        <script src="~/lib/Kendo/js/cultures/kendo.culture.ru-RU.min.js"></script>
+    <script src="~/lib/Kendo/js/messages/kendo.messages.ru-RU.min.js"></script>
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
@@ -24,6 +31,30 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <img id="avatar" class="rounded-circle" src="" value="" alt="avatar" style="height: 33px; width: 33px; object-fit:cover;"/>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-route-id="@User.Claims.ElementAt(0).Value">@User.Claims.ElementAt(1).Value</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Выход</a>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Войти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Зарегистрироваться</a>
+                            </li>
+                        }
                 </ul>
             </div>
         </div>

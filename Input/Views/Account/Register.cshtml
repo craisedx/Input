@@ -1,0 +1,70 @@
+﻿@model Input.ViewModels.Account.RegisterViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Регистрация";
+}
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<div id="signIn" class="container p-xl-3">
+    <div class="row justify-content-lg-center">
+        <div class="col-lg-8 text-lg-center pb-4">
+            <a asp-action="Index" asp-controller="Home" style="text-decoration: none; color: black">
+                <h1>Input</h1>
+            </a>
+            <h2 class="h4">Регистрация</h2>
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-lg-center">
+        <div class="col-lg-8" style="height: 200px; background-size: 100%"></div>
+        <div class="col-lg-8 shadow pt-3 pb-1 mb-2 bg-white rounded d-flex justify-content-center">
+            <div class="col-lg-6 mt-2">
+                <form class="form-group" method="post" asp-controller="Account" asp-action="Register">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input class="form-control form-control shadow-sm bg-white rounded-pill" asp-for="Email" placeholder="Введите почту">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control form-control shadow-sm bg-white rounded-pill" asp-for="UserName" placeholder="Введите имя пользователя">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control form-control shadow-sm bg-white rounded-pill" asp-for="Password" placeholder="Введите пароль">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control form-control shadow-sm bg-white rounded-pill" asp-for="ConfirmPassword" placeholder="Повторите пароль">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <div class="form-group  pt-1">
+                            <button type="submit" class="btn btn-block shadow-sm rounded-pill text-white" style="background-color: #2d6073">Зарегистрироваться</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-lg-center pt-5">
+        <div class="col-lg-8 text-lg-center">
+            <h6 class="h6">Уже зарегистрированы на Input? <a asp-controller="Account" asp-action="Login">Войдите в свой аккаунт.</a></h6>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<style>
+    body{
+        margin: 0px; 
+    }
+</style>
