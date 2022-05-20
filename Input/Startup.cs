@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Input.Identity;
 using Input.Migrations;
 using Input.Models;
 using Microsoft.AspNetCore.Builder;
@@ -40,8 +41,11 @@ namespace Input
                                                              "0123456789абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМН" +
                                                              "ОПРСТУФХЦЧШЩЪЫЬЭЮЯ_ ";
                     options.User.RequireUniqueEmail = true;
+                    
                 })
-                .AddEntityFrameworkStores<ApplicationContext>();
+                .AddErrorDescriber<AppErrorDescriber>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -72,7 +76,8 @@ namespace Input
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

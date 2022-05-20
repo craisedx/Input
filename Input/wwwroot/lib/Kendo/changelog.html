@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Changelog for Kendo UI Professional v2021.3.1109 (November 09, 2021)</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font: .75em/1.5 Tahoma, sans-serif;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            font-size: normal;
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: normal;
+
+            margin: 1.2em 0 .3em;
+            padding-bottom: .2em;
+        }
+
+        .breaking {
+            background-color: #e10c01;
+            color: #fff;
+            border-radius: 3px;
+            padding: 3px 4px;
+            display: inline-block;
+            font-size: 11px;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        #page {
+            width: 50em;
+            margin: 0 auto 2em;
+            border-radius: 0 0 1em 1em;
+            box-shadow: 0 0 10px #ccc;
+            padding: 1em 2em 2em;
+        }
+
+        .poBoxIcon {
+            float: left;
+            font-size: 2em;
+            margin: 1.2em .5em 0 0;
+        }
+
+        .poTopLine {
+            border-top: 2px solid #e1e1e1;
+            margin: 17px 0 40px 0;
+        }
+    </style>
+
+    <base href="https://www.telerik.com/support/whats-new/kendo-ui-web/release-history">
+</head>
+<body>
+    <div id="page">
+        <h1 class="title">Release notes</h1>
+        <div class="tClear poTopLine">
+        </div>
+    <h1>Common</h1>
+        <div class="tClear poTopLine">
+            <div class="poBoxIconText">
+                <p><strong>What's new</strong></p>
+<ul>
+<li>Support for Visual Studio 2022</li>
+<li>Classic Theme Package <a href="https://github.com/telerik/kendo-themes/blob/master/packages/classic/CHANGELOG.md#4420-2021-10-18"> (v4.42.0) </a></li>
+<li>Bootstrap Theme Package <a href="https://github.com/telerik/kendo-themes/blob/master/packages/bootstrap/CHANGELOG.md#4420-2021-10-18"> (v4.42.0) </a></li>
+<li>Default Theme Package <a href="https://github.com/telerik/kendo-themes/blob/master/packages/default/CHANGELOG.md#4420-2021-10-18"> (v4.42.0)  </a></li>
+<li>Material Theme Package <a href="https://github.com/telerik/kendo-themes/blob/master/packages/material/CHANGELOG.md#4420-2021-10-18"> (v4.42.0)  </a></li>
+</ul>
+                <p><strong>What's fixed</strong></p>
+<ul>
+<li>Resolve compatibility warnings for kendo.all.min.js reported by jQuery Migrate 3 (<a href="https://github.com/telerik/kendo-ui-core/issues/5439">#5439</a>)</li>
+</ul>
+            </div>
+        </div>
+
+        <h1>New components</h1>
+        <div class="tClear poTopLine">
+            <div class="poBoxIconText">
+                <h2>PivotGridV2</h2>
+            </div>
+        </div>
+
+        <h1>Features and Updates</h1>
+
+        <div class="tClear poTopLine">
+            <h2>Calendar</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Title's text of calendar has wrong color in Material less theme</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ColorPicker</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Add RGB input, Gradient/Palette Views, Contrast Tool and Update rendering</li>
+</ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>DatePicker</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Title's text of calendar has wrong color in Material less theme</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>DateTimePicker</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Title's text of calendar has wrong color in Material less theme</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Dialog</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Remove k-spacer element, which hides part of Window title when it is too long</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Grid</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Fit All Columns Width to Content</li>
+<li>Multi-sort CTRL+Click behavior</li>
+<li>Add Support for Non-String Fields in Grid's Search Panel</li>
+</ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Grid filter row does not work alongside with Sticky Columns (<a href="https://github.com/telerik/kendo-ui-core/issues/6571">#6571</a>)</li>
+<li>PDF export renders with loader when Kendo grid with endless scroll and allPages enabled (<a href="https://github.com/telerik/kendo-ui-core/issues/6559">#6559</a>)</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ListView</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Unexpected Accessibility role="list" applied to empty ListView (<a href="https://github.com/telerik/kendo-ui-core/issues/6509">#6509</a>)</li>
+<li>Change event not triggered on deselecting a ListView item using keyboard (Ctrl+Space) (<a href="https://github.com/telerik/kendo-ui-core/issues/6491">#6491</a>)</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>PDF Export</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>PDF export renders with loader when Kendo grid with endless scroll and allPages enabled (<a href="https://github.com/telerik/kendo-ui-core/issues/6559">#6559</a>)</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>PanelBar</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Updated PanelBar rendering and CSS classes</li>
+</ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>PivotGrid</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>PivotGrid invalid styles in less themes (<a href="https://github.com/telerik/kendo-ui-core/issues/6585">#6585</a>)</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Spreadsheet</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>kendo.ns is not respected in Spreadsheet dialogs (<a href="https://github.com/telerik/kendo-ui-core/issues/6555">#6555</a>)</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>TreeList</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Add keyboard navigation to Treelist Pager.</li>
+</ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Window</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Not modal Window should not be focused upon page load when it is visible initially (<a href="https://github.com/telerik/kendo-ui-core/issues/6561">#6561</a>)</li>
+<li>Remove k-spacer element, which hides part of Window title when it is too long</li>
+</ul>
+        </div>
+    </div>
+</body>
+</html>
