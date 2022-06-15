@@ -19,8 +19,6 @@ namespace Input
             SeedDatabase(host);
             CreateHostBuilder(args).Build().Run();
         }
-        // "DefaultConnection": "Server=WIN-FI5PDLPQ4DV\\DV;Database=InputDb;Trusted_Connection=True;MultipleActiveResultSets=true;"
-        //"DefaultConnection": "Server=20.25.120.116;Database=InputDb;User Id=sa;Password=1M3kh4***d3;"
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
