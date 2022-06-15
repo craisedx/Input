@@ -1,0 +1,104 @@
+﻿@model List<Input.ViewModels.FanFiction.FanFictionViewModel>
+
+@{
+    ViewData["Title"] = "Все произведения";
+}
+<div class="row ml-5 m-1">
+    <div class="col-2 bg-secondary shadow p-3 mb-5 bg-white rounded m-1 align-self-start">
+        <form asp-controller="FanFiction" asp-action="AllFanFictions" method="get">
+            @if (ViewBag.UserName != null)
+            {
+                <input type="hidden" name="userName" value="@ViewBag.UserName"/>
+                                    
+            }
+            <div class="form-group">
+                <p style="text-align: center" class="h3 hb">Вселенная</p>
+                <select size="1" name="fandomId" class="form-control">
+                    <option value="0">Не выбрано</option>
+                    @foreach (var item in ViewBag.Fandoms)
+                    {
+                        if (ViewBag.Fandom != null)
+                        {
+                            if (item.Id == ViewBag.Fandom.Id)
+                            {
+                                <option selected value="@item.Id">@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="background-color: #FFC23A; font-size: 20px; border:0">Найти</button>
+        </form>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="col-12 ml-4 bg-secondary shadow p-3 mb-5 bg-white rounded m-1 ">
+                <div class="row bg-white rounded justify-content-center pt-4 pb-3 pl-2 pr-2">
+                    @if (ViewBag.Fandom != null)
+                    {
+                        <a style="cursor: pointer;" onclick="RemoveFilter(1)" id="fandomId" value="@ViewBag.Fandom.Id"><span class="badge badge-info ml-2">@ViewBag.Fandom.Name</span></a>
+                    }
+                    @if (ViewBag.UserName != null)
+                    {
+                        <a style="cursor: pointer;" onclick="RemoveFilter(2)" id="userName" value="@ViewBag.UserName"><span class="badge badge-info ml-2">@ViewBag.UserName</span></a>
+                    }
+                </div>
+                <div class="row justify-content-center">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-6 col-md-3 bg-secondary shadow p-3 mb-5 bg-white rounded m-2">
+                            <a href="/ReadFanFiction/@item.Id">
+                                <img src="@item.Photo" class="img-thumbnail responsive" alt="...">
+                            </a>
+                            <a href="/ReadFanFiction/@item.Id" class="remove-blue-href">
+                                <h4 class="display-5 long-name">@item.Name</h4>
+                            </a>
+                            <a onclick="AddFilter(2,`@item.User.UserName`)" value=@item.User.UserName>
+                                <h5 class="display-5" style="color: #2f224d"><img style="max-width: 16px" src="~/img/user.svg"/>@item.User.UserName</h5>
+                            </a>
+                            <a onclick="AddFilter(1,@item.Fandom.Id)" value=@item.Fandom.Id>
+                                <h5 class="display-5"><span class="badge badge-info">@item.Fandom.Name</span></h5>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+<script>
+function RemoveFilter(filterId){
+    const fandomElem = $('#fandomId');
+    const userNameElem = $('#userName');
+    let fandom = null;
+    let userName = '';
+    if (fandomElem !== null)  fandom = fandomElem.attr('value');
+    if (userNameElem !== null)  userName = userNameElem.attr('value');
+    
+    window.location.replace(`/FanFiction/RemoveFilter/?filterId=${filterId}&fandomId=${fandom}&userName=${userName}`);
+}
+function AddFilter(filterId, value){
+    const fandomElem = $('#fandomId');
+    const userNameElem = $('#userName');
+    let fandom=null;
+    let userName='';
+    if (userNameElem !== null)  userName = userNameElem.attr('value');
+    if (fandomElem !== null)  fandom = fandomElem.attr('value');
+    
+    if (filterId === 1)
+    {
+         window.location.replace(`/FanFiction/AddFilter/?fandomId=${value}&userName=${userName}`);
+    }
+    else if(filterId === 2){
+         window.location.replace(`/FanFiction/AddFilter/?fandomId=${fandom}&userName=${value}`);
+    }
+}
+</script>

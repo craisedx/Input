@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Input.Models
 {
@@ -13,8 +14,9 @@ namespace Input.Models
         public Status Status { get; set; }
         public int StatusId { get; set; }
         
-        [Required]
         [MaxLength(600)]
         public string Message { get; set; }
+        
+        public DateTime ChangeTime { get; set; }
     }
 }

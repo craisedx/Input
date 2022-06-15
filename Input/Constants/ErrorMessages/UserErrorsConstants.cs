@@ -6,9 +6,11 @@
         public const string AddressNotSpecified = "Не указан адрес";
         public const string PasswordNotSpecified = "Не указан пароль";
         public const string PasswordEnteredIncorrectly = "Пароль введен неверно";
+        public const string PasswordCompareIncorrectly = "Пароли не совпадают";
         public const string InvalidEmail = "Некорректный адрес";
         public const string EmailNotConfirmed = "Email не подтвержден";
         public const string LoginPasswordEnteredIncorrectly = "Логин или пароль введены неправильно";
+        public const string LockedOutUser = "Ваш аккаунт заблокирован";
         public const string ErrorMessageMinLength = "Длина имени должна быть от 3 до 50 символов";
         
         public static string UserNameAlreadyUse(string userName) {

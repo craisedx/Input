@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = $"Правила";
+}
+
+<div class="container">
+    <div class="text-center h2 mb-5">Здесь собраны основные правила из-за которых ваше произведение может быть заблокировано или же не опубликовано.</div>
+    <div class="mb-4">
+        <div class="h4 mb-3">Разрешается:</div>
+        <blockquote class="blockquote text-left">
+            <p class="mb-0"><img src="/img/access-mark.svg" class="access-mark" />Фанфики или сочинения, написанные вами.</p>
+            <footer class="blockquote-footer">Написанный вами текст должен быть предварительно проверен на ошибки и оформлен в соответствии с правилами русского языка.</footer>
+        </blockquote>
+    </div>
+    <div class="mb-4">
+    <div class="h4 mb-3">Запрещается:</div>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Тексты, написанные другими, скопированные из интернета. Ни под каким предлогом и ни в каком виде.</p>
+        <footer class="blockquote-footer">
+            <ul>
+              <li>Даже написав в шапке "фанф не мой".</li>
+              <li>Даже получив разрешение от автора.</li>
+              <li>Ни под каким предлогом!</li>
+              <li>Это не шутка. За нарушение этого правила вас легко могут забанить на сайте.</li>
+            </ul>
+        </footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Тексты на языках, отличных от русского.</p>
+        <footer class="blockquote-footer">«Input» — русскоязычный ресурс. Вставки на иностранных языках допустимы, но основной текст должен быть на русском.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Флуд, спам и тексты оскорбительного и/или провокационного характера.</p>
+        <footer class="blockquote-footer">Не стоит поддаваться соблазну подшутить над читателями или опубликовать что-либо не соответствующее тематике фэндома или формату ресурса в целом. Подобные публикации будут удалены, а нарушителей ждут соответствующие санкции.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Работы, затрагивающие недавние мировые трагедии и политические конфликты.</p>
+        <footer class="blockquote-footer">Неважно, с какой именно целью написана работа - не стоит использовать недавние события-трагедии для создания своих работ, это по меньшей мере нетактично по отношению к тем, кто мог от них пострадать. Если вы хотите написать текст по историческим событиям, выждите хотя бы полгода с момента, когда ситуация стабилизируется.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Конкурсы, мероприятия, флешмобы, объявления, обращения к читателям под видом фанфика или его части.</p>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Мнения о событиях или описания своей жизни, похожие на записи в личном дневнике.</p>
+        <footer class="blockquote-footer">Фанфик или сочинение — художественное произведение с завязкой, кульминацией, развязкой, сюжетом. Записи вроде «Я встала в 8 утра и пошла в школу» лучше оставить для личного дневника.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Подборки цитат, изречений, анекдотов, постов, логов.</p>
+        <footer class="blockquote-footer">Можно опубликовать статью, основанную на цитатах, но только при том условии, что это будет ваше авторское исследование, основанное на них, а не просто подборка со скупыми комментариями. Уместность каждой такой статьи решается индивидуально.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Переводы текстов песен.</p>
+        <footer class="blockquote-footer">Неважно, в рифму или нет — это не фанфикшен и не сочинение.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Списки признаков и причин, советов, ТОПов, плюсов и минусов, анкет персонажей, подобного.</p>
+        <footer class="blockquote-footer">Перечисление чего-либо не является фанфикшеном. Запрет не касается только работ в стиле «Жанры и предупреждения». Уместность каждой такой работы решается индивидуально.</footer>
+    </blockquote>
+    <blockquote class="blockquote text-left">
+        <p class="mb-0"><img src="/img/red-cross.svg" class="red-cross" />Неполные работы со ссылкой на продолжение на стороннем ресурсе.</p>
+        <footer class="blockquote-footer">Пример: вот первая глава, остальное читайте по ссылке.</footer>
+    </blockquote>
+</div>
+</div>
+<style>
+    .blockquote-footer::before
+    {
+        content: none!important;}
+    .blockquote-footer{
+        padding-left: 4%;
+    }
+    
+    footer ul{
+            padding-left: 2%!important;
+        }
+        
+    .red-cross {
+    max-width: 15px;
+    margin-right: 10px;
+    }
+    
+    .access-mark {
+    max-width: 19px;
+    margin-right: 7px;
+    }
+</style>

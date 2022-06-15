@@ -1,0 +1,120 @@
+﻿@model Input.ViewModels.FanFiction.FanFictionChaptersViewModel
+
+<div class="row ml-5 m-1">
+    @if (Model.FanFiction.Moderation?.User != null)
+    {
+        @if (User.Identity.IsAuthenticated && Model.FanFiction.Moderation.User.Id == User.Claims.ElementAt(0).Value)
+        {
+            <div class="col-3 bg-secondary shadow p-3 mb-5 bg-white rounded align-self-start">
+                <h3 class="d-flex justify-content-center">Проверка</h3>
+                <form enctype="multipart/form-data" method="post" asp-action="CheckedFanFiction" asp-controller="Moderation" asp-anti-forgery="true">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="Id" value=@Model.FanFiction.Moderation.Id/>
+                    <div class="form-group">
+                        <p class="h5 hb">Cтатус</p>
+                        <select size="1" name="statusId" class="form-control">
+                            @if (@Model.FanFiction.Moderation.Status != null)
+                            {
+                                @foreach (var item in ViewBag.ModerationStatuses)
+                                {
+                                    @if (Model.FanFiction.Moderation.Status.Id == item.Id)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                @foreach (var item in ViewBag.ModerationStatuses)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <p class="h5 hb">Сообщение</p>
+                        <textarea name="message" rows="10" style="resize:none" class="form-control">@Model.FanFiction.Moderation.Message
+            </textarea>
+                    </div>
+                    <button type="submit" class="btn" style="background-color: #FFC23A; font-size: 20px">Выставить</button>
+                </form>
+            </div>
+        }
+    }
+    <div class="row">
+        <div class="col-10 ml-4">
+            <div class="container">
+                <div class="row bg-secondary shadow p-3 mb-5 bg-white rounded">
+                    <div class="col-10 col-md-5">
+                        <h2 class="display-5">@Model.FanFiction.Name</h2>
+                        <div class="form-group">
+                            <a>@Model.FanFiction.Fandom.Name</a>
+                        </div>
+                        <div>
+                            <img style="min-width: 20px;padding-bottom: 6px;" src="https://img.icons8.com/material-outlined/20/000000/filled-like.png"/><span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                        </div>
+                        <div class="form-group">
+                            <p>Автор: <a href="/Profile/UserProfile/@Model.FanFiction.User.Id">@Model.FanFiction.User.UserName</a></p>
+                        </div>
+                        <div class="form-group">
+                            @if (@Model.FanFiction.Photo != null)
+                            {
+                                <div class="card border-white mt-1">
+                                    <img src="@Model.FanFiction.Photo" id="img-preview" value=""/>
+                                </div>
+                            }
+                        </div>
+                        <div id="editor"></div>
+                    </div>
+                </div>
+                <div class="row bg-secondary shadow p-3 mb-5 bg-white rounded mt-5">
+                    <div>
+                        <h4 class="disabley-5">Главы :</h4>
+
+                        @if (Model.Chapters.Count > 0)
+                        {
+                            <ul class="nav justify-content-start">
+                                @for (int i = 0; i < Model.Chapters.Count; i++)
+                                {
+                                    var glava = $"glava{@i}";
+                                    <li class="nav-item m-1">
+                                        <a class="nav-link btn btn-success" data-toggle="tab" href="#@glava">@Model.Chapters[i].Name</a>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="tab-content">
+                                @for (int i = 0; i < Model.Chapters.Count; i++)
+                                {
+                                    var glava = $"glava{@i}";
+                                    <div id="@glava" class="container tab-pane fade">
+                                        <br/>
+                                        <h3>@Model.Chapters[i].Name</h3>
+                                        <p>@Html.Raw(@Model.Chapters[i].ChapterBody)</p>
+                                        <div class="row justify-content-center">
+                                            <img class="card-img-top shadow-sm bg-white rounded image-popup-no-margins img-card" style="max-width:1110px; max-height: 625px;" src=@Model.Chapters[i].Photo>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="text-primary">Нет ни одной главы</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$( document ).ready(function() {
+     $('#editor').html( $("#editor").html('@Model.FanFiction.ShortDescription').text()).contents();
+});
+</script>

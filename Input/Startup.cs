@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Input.Business.Interfaces;
+using Input.Business.Services;
 using Input.Identity;
 using Input.Migrations;
 using Input.Models;
+using Input.ViewModels.Mappings;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +32,14 @@ namespace Input
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IFanFictionService,FanFictionService>();
+            services.AddScoped<IModerationService,ModerationService>();
+            services.AddScoped<IAdminService,AdminService>();
+            services.AddScoped<ISeedDatabaseService, SeedDatabaseService>();
+            
+            services.AddAutoMapper(typeof(MappingProfile));
+            
             services.AddControllersWithViews();
             
             services.AddDbContext<ApplicationContext>(
@@ -41,7 +53,7 @@ namespace Input
                                                              "0123456789абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМН" +
                                                              "ОПРСТУФХЦЧШЩЪЫЬЭЮЯ_ ";
                     options.User.RequireUniqueEmail = true;
-                    
+
                 })
                 .AddErrorDescriber<AppErrorDescriber>()
                 .AddEntityFrameworkStores<ApplicationContext>()
@@ -55,6 +67,11 @@ namespace Input
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 1;
                 options.Password.RequiredUniqueChars = 0;
+            });
+            
+            services.ConfigureApplicationCookie(config => {
+                config.LoginPath = "/Account/Login";
+                config.AccessDeniedPath = "/Home/AccessDenied";
             });
         }
 

@@ -10,7 +10,6 @@ namespace Input.Models
         public string Name { get; set; }
         
         [Required]
-        [MaxLength(5000)]
         public string ChapterBody { get; set; }
         
         public FanFiction FanFiction { get; set; }

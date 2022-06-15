@@ -28,7 +28,6 @@ namespace Input.Migrations
 
                     b.Property<string>("ChapterBody")
                         .IsRequired()
-                        .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FanFictionId")
@@ -88,7 +87,7 @@ namespace Input.Migrations
                     b.Property<int>("FandomId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ModerationId")
+                    b.Property<int?>("ModerationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -101,8 +100,8 @@ namespace Input.Migrations
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(3000)
+                        .HasColumnType("nvarchar(3000)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -142,8 +141,10 @@ namespace Input.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("ChangeTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasMaxLength(600)
                         .HasColumnType("nvarchar(600)");
 
@@ -198,6 +199,9 @@ namespace Input.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("LastLoginDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -220,6 +224,9 @@ namespace Input.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -438,9 +445,7 @@ namespace Input.Migrations
 
                     b.HasOne("Input.Models.Moderation", "Moderation")
                         .WithMany()
-                        .HasForeignKey("ModerationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModerationId");
 
                     b.HasOne("Input.Models.User", "User")
                         .WithMany()
@@ -473,7 +478,7 @@ namespace Input.Migrations
             modelBuilder.Entity("Input.Models.UserRating", b =>
                 {
                     b.HasOne("Input.Models.FanFiction", "FanFiction")
-                        .WithMany()
+                        .WithMany("UserRating")
                         .HasForeignKey("FanFictionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -536,6 +541,11 @@ namespace Input.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Input.Models.FanFiction", b =>
+                {
+                    b.Navigation("UserRating");
                 });
 #pragma warning restore 612, 618
         }

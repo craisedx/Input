@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Input.Migrations
 {
-    public partial class CreateDatabase : Migration
+    public partial class СreateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,6 +26,8 @@ namespace Input.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserPhoto = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -187,7 +189,8 @@ namespace Input.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false)
+                    Message = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: true),
+                    ChangeTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -214,9 +217,9 @@ namespace Input.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
-                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(3000)", maxLength: 3000, nullable: false),
                     FandomId = table.Column<int>(type: "int", nullable: false),
-                    ModerationId = table.Column<int>(type: "int", nullable: false),
+                    ModerationId = table.Column<int>(type: "int", nullable: true),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -239,7 +242,7 @@ namespace Input.Migrations
                         column: x => x.ModerationId,
                         principalTable: "Moderations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,7 +252,7 @@ namespace Input.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ChapterBody = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
+                    ChapterBody = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FanFictionId = table.Column<int>(type: "int", nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

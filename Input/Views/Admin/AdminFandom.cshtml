@@ -1,0 +1,75 @@
+﻿<nav>
+    <div class="nav nav-tabs mb-5 d-flex justify-content-center" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link" asp-action="AdminUser" aria-controls="nav-contact" aria-selected="false">Пользователи</a>
+        <a class="nav-item nav-link active" asp-action="AdminFandom" aria-controls="nav-contact" aria-selected="false">Вселенные</a>
+        <a class="nav-item nav-link" asp-action="AdminStatus" aria-controls="nav-contact" aria-selected="false">Статусы</a>
+    </div>
+</nav>
+<div class="container">
+    <div id="example">
+        <div id="grid"></div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    $("#grid").kendoGrid({
+        dataSource: {
+            transport: {
+                read: "@Url.Action("GetAllFandoms", "Admin")",
+                update: {
+                    url: "@Url.Action("UpdateFandom","Admin")",
+                    dataType: "json",
+                    type: "POST"
+                },
+                 create:{
+                     url: "@Url.Action("CreateFandom", "Admin")",
+                     dataType: "json",
+                     type: "POST"
+                 },
+            },
+            schema: {
+                model: {
+                    id: "Id",
+                    fields: {
+                        Id: { editable: false, from: "id", type: "number" },
+                        Name: { from: "name", validation: {required: true} }
+                    }
+                }
+            },
+            pageSize: 20,
+            serverPaging: true,
+            serverFiltering: true,
+            serverSorting: true
+        },
+        height: 550,
+        editable: {
+            mode: "popup",
+            window: {
+                scrollable: false,
+                resizable: false,
+            }
+        },
+        pageable: true,
+        filterable: true,
+        sortable: true,
+        toolbar: [
+                {
+                    name: "create"
+                }
+            ],
+        columns: [
+            {
+                field:"Id",
+                filterable: false
+            },
+            {
+                field: "Name",
+                title: "Название"
+            },
+            {
+                command: "edit", 
+            },
+        ]
+    });
+});
+</script>

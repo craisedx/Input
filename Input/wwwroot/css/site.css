@@ -18,6 +18,26 @@ a {
   border-color: #1861ac;
 }
 
+.responsive {
+  width: 100%;
+  max-height: 200px;
+  max-width: 250px;
+  min-height: 200px;
+  min-width: 250px;
+  height: auto;
+  object-fit: cover;
+}
+
+.responsive-chapter-page {
+  width: 100%;
+  max-height: 700px;
+  max-width: 1100px;
+  min-height: 200px;
+  min-width: 250px;
+  height: auto;
+  object-fit: cover;
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
@@ -68,4 +88,62 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+.remove-blue-href:active,
+.remove-blue-href:hover,
+.remove-blue-href {
+  text-decoration: none;
+  color: inherit;
+}
+
+.long-name{
+  word-break: break-all;
+}
+
+.th-color {
+  background: #f8f9fa;
+}
+
+.ban-user{
+  background-color: #e1e1e1;
+}
+
+.counter-box {
+  display: block;
+  background: #f6f6f6;
+  padding: 40px 20px 37px;
+  text-align: center
+}
+
+.counter-box p {
+  margin: 5px 0 0;
+  padding: 0;
+  color: #909090;
+  font-size: 18px;
+  font-weight: 500
+}
+
+.counter-box i {
+  font-size: 60px;
+  margin: 0 0 15px;
+  color: #d2d2d2
+}
+
+.counter {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: #666;
+  line-height: 28px
+}
+
+.counter-box.colored {
+  background: #3acf87
+}
+
+.counter-box.colored p,
+.counter-box.colored i,
+.counter-box.colored .counter {
+  color: #fff
 }

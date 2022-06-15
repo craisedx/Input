@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using Input.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Input.Models;
@@ -12,17 +9,40 @@ namespace Input.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IFanFictionService fanFictionService;
+        private readonly IAdminService adminService;
+        public HomeController(ILogger<HomeController> logger, IFanFictionService fanFictionService,IAdminService adminService)
         {
             _logger = logger;
+            this.fanFictionService = fanFictionService;
+            this.adminService = adminService;
         }
 
         public IActionResult Index()
         {
+            var bestLikeFanFiction = fanFictionService.GetBestPostByUniqueFandom(6);
+            
+            ViewBag.BestFandomsByLikes = bestLikeFanFiction;
+
+            var popularFandoms = fanFictionService.GetBestFandoms(6);
+            
+            ViewBag.BestFandoms = popularFandoms;
+
+            var lastAddedAndApproved = fanFictionService.GetLastAddedAndApproved(6);
+            
+            return View(lastAddedAndApproved);
+        }
+
+        public IActionResult AccessDenied(string ReturnUrl = null)
+        {
             return View();
         }
 
+        public IActionResult Rules()
+        {
+            return View();
+        }
+        
         public IActionResult Privacy()
         {
             return View();

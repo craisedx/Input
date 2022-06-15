@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+@model List<Input.ViewModels.User.UserViewModel>
+<nav>
+    <div class="nav nav-tabs mb-5 d-flex justify-content-center" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" asp-action="AdminUser" aria-controls="nav-contact" aria-selected="false">Пользователи</a>
+        <a class="nav-item nav-link" asp-action="AdminFandom" aria-controls="nav-contact" aria-selected="false">Вселенные</a>
+        <a class="nav-item nav-link" asp-action="AdminStatus" aria-controls="nav-contact" aria-selected="false">Статусы</a>
+    </div>
+</nav>
+
+<div id="adminPanel" class="container">
+    <div class="container col-lg-12 mt-5">
+        <div class="row justify-content-center mb-5">
+            <div class="four col-md-3">
+                <div class="counter-box shadow-sm rounded">
+                    <i class="fa fa-group"></i> <span class="counter">@ViewBag.CountUsers</span>
+                    <p>Пользователей</p>
+                </div>
+            </div>
+            <div class="four col-md-3">
+                <div class="counter-box shadow-sm rounded">
+                    <i class="fa fa-shopping-cart"></i> <span class="counter">@ViewBag.CountBlocked</span>
+                    <p>Заблокированных</p>
+                </div>
+            </div>
+            <div class="four col-md-3">
+                <div class="counter-box shadow-sm rounded">
+                    <i class="fa fa-user"></i> <span class="counter">@ViewBag.CountAdmins</span>
+                    <p>Администраторов</p>
+                </div>
+            </div>
+        </div>
+        <form method="post">
+            <table class="table bg-secondary shadow p-3 mb-5 bg-white rounded m-2" id="myTable">
+                <thead class="th-color">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Дата регистрации</th>
+                    <th scope="col">Последний вход</th>
+                    <th scope="col">Состояние</th>
+                    <th style="width: 80px"></th>
+                    <th style="width: 80px"></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in @Model)
+                {
+                    @if (item.User.LockoutEnd > DateTime.Now)
+                    {
+                        <tr class="ban-user">
+                            <td>@item.User.Id</td>
+                            <td>@item.User.UserName</td>
+                            <td>@item.User.Email</td>
+                            <td>@item.User.RegistrationDate</td>
+                            <td>@item.User.LastLoginDate</td>
+                            <td style="color: red">Заблокирован</td>
+                            <td class="align-middle">
+                                <button class="btn btn-outline-success" type="submit" asp-action="UnBlockUser" asp-controller="Admin" asp-route-id="@item.User.Id">Разблокировать</button>
+                            </td>
+                            @if (item.IsAdmin)
+                            {
+                                <td class="align-middle">
+                                    <button class="btn btn-outline-secondary" type="submit" asp-action="DeleteAdmin" asp-controller="Admin" asp-route-id="@item.User.Id">Убрать права</button>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="align-middle">
+                                    <button class="btn btn-outline-primary" type="submit" asp-action="AddAdmin" asp-controller="Admin" asp-route-id="@item.User.Id">Администратор</button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@item.User.Id</td>
+                            <td>@item.User.UserName</td>
+                            <td>@item.User.Email</td>
+                            <td>@item.User.RegistrationDate</td>
+                            <td>@item.User.LastLoginDate</td>
+                            <td style="color: green">Активен</td>
+                            <td class="align-middle">
+                                <button class="btn btn-outline-danger" type="submit" asp-action="BlockUser" asp-controller="Admin" asp-route-id="@item.User.Id">Заблокировать</button>
+                            </td>
+                            @if (item.IsAdmin)
+                            {
+                                <td class="align-middle">
+                                    <button class="btn btn-outline-secondary" type="submit" asp-action="DeleteAdmin" asp-controller="Admin" asp-route-id="@item.User.Id">Убрать права</button>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="align-middle">
+                                    <button class="btn btn-outline-primary" type="submit" asp-action="AddAdmin" asp-controller="Admin" asp-route-id="@item.User.Id">Администратор</button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script>
+$('.counter').each(function () {
+$(this).prop('Counter',0).animate({
+Counter: $(this).text()
+}, {
+duration: 4000,
+easing: 'swing',
+step: function (now) {
+$(this).text(Math.ceil(now));
+}
+});
+});
+
+</script>

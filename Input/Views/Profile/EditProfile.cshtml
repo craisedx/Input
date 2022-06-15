@@ -1,0 +1,30 @@
+﻿@model Input.ViewModels.Account.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Редактирование профиля";
+}
+<div id="editProfile" class="container p-xl-3">
+    <div class="row">
+        <div class="col-lg-4 shadow pt-3 pb-1 mb-2 bg-white rounded">
+            <form class="form-group" method="post" asp-controller="Profile" asp-action="EditProfile">
+                <input type="hidden" asp-for="Id" value="@Model.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Photo"></label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label form-control shadow-sm bg-white rounded" for="customFile">Выбрать файл</label>
+                        <input type="hidden" id="file-upload-url" asp-for="Photo" value="@Model.Photo"/>
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+                    <div class="card border-white mt-1">
+                        <img src="@Model.Photo" id="img-preview"/>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-success shadow-sm rounded btn-block">Изменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

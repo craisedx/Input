@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Input.Business.Interfaces;
+using Input.Business.Services;
 using Input.Constants;
 using Input.Constants.InfoMessages;
 using Input.Email;
@@ -14,23 +17,30 @@ namespace Input.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationContext db;
+        private readonly IUserService userService;
+        private readonly IFanFictionService fanFiction;
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
         
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ApplicationContext context)
+            ApplicationContext context,
+            IUserService userService,
+            IFanFictionService fanFiction)
         {
             db = context;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.userService = userService;
+            this.fanFiction = fanFiction;
         }
         
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
+            
             return RedirectToAction("Index", "Home");
         }
         
@@ -49,23 +59,28 @@ namespace Input.Controllers
                 var user = userManager.FindByNameAsync(model.UserName).Result;
                 var signInResult = await signInManager
                     .PasswordSignInAsync(model.UserName, model.Password, true, false);
+                
                 if (signInResult.Succeeded)
                 {
                     if (user.EmailConfirmed)
                     {
-                        if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                            return Redirect(model.ReturnUrl);
-
+                        await userService.SetLastLogin(model);
+                        
                         await db.SaveChangesAsync();
+                        
+                        if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                            return LocalRedirect(model.ReturnUrl);
+                        
                         return RedirectToAction("Index", "Home");
                     }
 
                     ModelState.AddModelError(string.Empty, UserErrorsConstants.EmailNotConfirmed);
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, UserErrorsConstants.LoginPasswordEnteredIncorrectly);
-                }
+
+                ModelState.AddModelError(string.Empty,
+                    signInResult.IsLockedOut
+                        ? UserErrorsConstants.LockedOutUser
+                        : UserErrorsConstants.LoginPasswordEnteredIncorrectly);
             }
 
             return View(model);
@@ -97,6 +112,8 @@ namespace Input.Controllers
 
             if (!result.Succeeded) return View("Error");
             
+            await signInManager.SignInAsync(user, true);
+            
             return RedirectToAction("Index", "Home");
         }
         
@@ -114,7 +131,8 @@ namespace Input.Controllers
                 var user = new User
                 {
                     Email = model.Email, UserName = model.UserName,
-                    UserPhoto = UserInfoConstants.BaseUserPhoto
+                    UserPhoto = UserInfoConstants.BaseUserPhoto,
+                    RegistrationDate = DateTime.Now
                 };
 
                 var result = await userManager.CreateAsync(user, model.Password);
@@ -129,7 +147,7 @@ namespace Input.Controllers
                         protocol: HttpContext.Request.Scheme);
 
                     await EmailWork.SendEmailDefault(model.Email, UserInfoConstants.AccountConfirmation,
-                        UserInfoConstants.SendConfirmEmail(callbackUrl));
+                        UserInfoConstants.SendConfirmEmail(model.UserName,callbackUrl));
                     
                     return RedirectToAction("Confirm", "Account");
                 }

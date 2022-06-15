@@ -1,0 +1,203 @@
+﻿@using Input.Constants.Statuses
+@model Input.ViewModels.FanFiction.FanFictionPostViewModel
+
+<div class="row bg-secondary shadow p-3 mb-5 bg-white rounded">
+    <div class="col-10 col-md-5">
+        <h2 class="display-5">@Model.FanFiction.Name</h2>
+        <div class="form-group">
+            <a>@Model.FanFiction.Fandom.Name</a>
+        </div>
+        @if (ViewBag.PreviousChapter != null)
+        {
+            <a href="/ReadFanFiction/@Model.FanFiction.Id/@ViewBag.PreviousChapter">@ViewBag.PreviousChapter</a>
+        }
+        @if (ViewBag.NextChapter != null)
+        {
+            <a href="/ReadFanFiction/@Model.FanFiction.Id/@ViewBag.NextChapter">@ViewBag.NextChapter</a>
+        }
+        <form class="" method="get" asp-controller="FanFiction">
+            <input type="hidden" name="id" value="@Model.FanFiction.Id"/>
+            <div>
+                @if (User.Identity.IsAuthenticated)
+                {
+
+                    if (@Model.FanFiction.UserRating.Any(i => i.User.Id == User.Claims.ElementAt(0).Value))
+                    {
+                        <button type="submit" class="btn btn-danger shadow-sm mr-1" asp-action="RemoveLike" asp-controller="FanFiction">
+                            <img style="min-width: 20px;padding-bottom: 6px;" src="https://img.icons8.com/ios/20/000000/dislike.png"/><span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-success shadow-sm mr-1" asp-action="SetLike" asp-controller="FanFiction">
+                            <img style="min-width: 20px;padding-bottom: 6px;" src="https://img.icons8.com/material-outlined/20/000000/filled-like.png"/><span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                        </button>
+                    }
+                }
+                else
+                {
+                    <img style="min-width: 20px;padding-bottom: 6px;" src="https://img.icons8.com/material-outlined/20/000000/filled-like.png"/><span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                }
+            </div>
+        </form>
+        <div class="form-group">
+            <p>Автор: <a href="/Profile/UserProfile/@Model.FanFiction.User.Id">@Model.FanFiction.User.UserName</a></p>
+        </div>
+        <div class="form-group">
+            @if (@Model.FanFiction.Photo != null)
+            {
+                <div class="card border-white mt-1">
+                    <img src="@Model.FanFiction.Photo" id="img-preview" value=""/>
+                </div>
+            }
+        </div>
+        <div id="editor"></div>
+    </div>
+    <div class="col align-self-start">
+        @if (User.Identity.IsAuthenticated && User.Claims.ElementAt(0).Value == Model.FanFiction.UserId && Model.FanFiction.Moderation == null)
+        {
+            <div>
+                <a onclick="PublicationFanFiction(@Model.FanFiction.Id)" class="btn btn-primary shadow-sm rounded btn-block">Опубликовать</a>
+            </div>
+        }
+    </div>
+    @if (User.Identity.IsAuthenticated && User.Claims.ElementAt(0).Value == Model.FanFiction.UserId)
+    {
+        <div class="col align-self-start">
+            <div>
+                <a href="/FanFiction/AddChapter/@Model.FanFiction.Id" class="btn btn-primary shadow-sm rounded btn-block">Добавить главу</a>
+            </div>
+        </div>
+        <div class="col align-self-start">
+            <div>
+                <a asp-controller="FanFiction" asp-action="EditFanFiction" asp-route-id="@Model.FanFiction.Id" class="btn btn-success shadow-sm rounded btn-block">Редактировать</a>
+            </div>
+            <br/>
+            <div>
+                <a onclick="RemoveFanFiction(@Model.FanFiction.Id)" class="btn btn-danger shadow-sm rounded btn-block">Удалить</a>
+            </div>
+        </div>
+    }
+</div>
+<div class="row bg-secondary shadow p-3 mb-5 bg-white rounded mt-5">
+    <div>
+        <h4 class="disabley-5">Главы :</h4>
+
+        @if(ViewBag.Chapters.Count > 0){
+            <ul class="nav justify-content-start">
+                @for (int i = 0; i < ViewBag.Chapters.Count; i++)
+                {
+                    var glava = $"glava{@i}";
+                    <li class="nav-item m-1">
+                        <a class="nav-link btn btn-success" data-toggle="tab" href="#@glava">@ViewBag.Chapters[i].Name</a>
+                    </li>
+                }
+            </ul>
+            <div class="tab-content">
+                @for (int i = 0; i < ViewBag.Chapters.Count; i++)
+                {
+                    var glava = $"glava{@i}";
+                    <div id="@glava" class="container tab-pane fade">
+                        <br/>
+                        <h3>@ViewBag.Chapters[i].Name</h3>
+                        <p>@Html.Raw(@ViewBag.Chapters[i].ChapterBody)</p>
+                        <div class="row justify-content-center">
+                            <img class="card-img-top shadow-sm bg-white rounded image-popup-no-margins img-card" style="max-width:1110px; max-height: 625px;" src=@ViewBag.Chapters[i].Photo>
+                        </div>
+                        @if (User.Identity.IsAuthenticated && User.Claims.ElementAt(0).Value == Model.FanFiction.UserId)
+                        {
+                            <br/>
+                            <br/>
+                            <div>
+                                <a href="/FanFiction/EditChapter/@ViewBag.Chapters[i].Id" class="btn btn-success shadow-sm rounded btn-block">Редактировать</a>
+                            </div>
+                            <br/>
+                            <div>
+                                <a onclick="RemoveChapter(@ViewBag.Chapters[i].Id)" class="btn btn-danger shadow-sm rounded btn-block">Удалить</a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <a class="text-primary">Нет ни одной главы</a>
+        }
+    </div>
+</div>
+
+@if (Model.FanFiction.Moderation != null && @Model.FanFiction.Moderation.Status.Name == StatusesConstants.ApprovedStatus)
+{
+    <div class="row">
+    <div class="bg-secondary shadow p-3 mb-5 bg-white rounded mt-5">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form method="post" asp-action="AddComment" asp-controller="FanFiction">
+                <input type="hidden" name="FanFictionId" value=@Model.FanFiction.Id />
+                <div class="form-group">
+                    <label for="CommentBody">Ваш комментарий</label>
+                    <textarea type="text" class="form-control" name="CommentBody" id="CommentBody" placeholder="Ваш комментарий"></textarea>
+                    @Html.ValidationMessageFor(model => model.Comment.CommentBody, "", new {@class = "text-danger"})
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                <strong>Ой!</strong> Войдите в аккаунт чтобы оставлять комментарии.
+            </div>
+            
+        }
+    </div>
+    </div>
+}
+
+@if (ViewBag.Comments.Count != 0)
+{
+    <div class="row">
+        <div class="col-11 col-md-12 bg-secondary shadow p-3 mb-5 bg-white rounded m-2">
+            @foreach (var item in ViewBag.Comments)
+            {
+                <div class="col-11 col-md-12 bg-secondary shadow p-3 mb-5 bg-white rounded">
+                    <div class="row border-bottom">
+                        <div class="col-9">
+                            <a class="text-dark text-decoration-none" href="#">
+                                <img class="rounded-circle im_nav_avatar_photo" style="width: 50px; height: 50px" src=@item.User.UserPhoto>
+                                <span class="font-weight-bold"><a style="text-decoration: none; color: #000 !important;" href="/Profile/UserProfile/@item.User.Id">@item.User.UserName</a></span>
+                            </a>
+                        </div>
+                        <div class="col-3 text-right">
+                            <span class="text-right text-muted">@item.SendingTime.ToString()</span>
+                        </div>
+                    </div>
+
+                    <br class="br">
+                    <p>@item.CommentBody</p>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+
+<script>
+$( document ).ready(function() {
+     $('#editor').html( $("#editor").html('@Model.FanFiction.ShortDescription').text()).contents();
+});
+    
+    function RemoveChapter(index){
+        $.ajax({
+            type: "get",
+            url: `/FanFiction/RemoveChapter?id=${index}`,
+            success: function (message) {
+                alert(message);
+                window.location.reload();
+            },
+            error: function (response) {
+            }
+        });
+    }
+</script>

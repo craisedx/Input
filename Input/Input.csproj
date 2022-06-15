@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
       <PackageReference Include="MailKit" Version="3.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.17" />
@@ -18,6 +19,12 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Kendo.Mvc, Version=2012.2.423.340, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
+        <HintPath>bin\Debug\net5.0\Kendo.Mvc.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

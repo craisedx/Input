@@ -20,7 +20,7 @@ namespace Input.ViewModels.Account
 
         [DataType(DataType.Password)]
         [Required(ErrorMessage = UserErrorsConstants.PasswordNotSpecified)]
-        [Compare(UserInfoConstants.Password, ErrorMessage = UserErrorsConstants.PasswordEnteredIncorrectly)]
+        [Compare(UserInfoConstants.Password, ErrorMessage = UserErrorsConstants.PasswordCompareIncorrectly)]
         public string ConfirmPassword { get; set; }
     }
 }

@@ -1,0 +1,170 @@
+﻿@using Input.Constants.Statuses
+@model Input.ViewModels.FanFiction.FanFictionPostViewModel
+
+@{
+    ViewData["Title"] = Model.FanFiction.Name;
+}
+
+<div class="container mt-1">
+<div class="row bg-secondary shadow p-3 mb-5 bg-white rounded">
+    <div class="col-10 col-md-5">
+        <h2 class="display-5">@Model.FanFiction.Name</h2>
+        <a class="text-dark text-decoration-none" href="/Profile/UserProfile/@Model.FanFiction.User.Id">
+            <img class="rounded-circle pb-2 im_nav_avatar_photo" style="max-width: 40px;" src="@Model.FanFiction.User.UserPhoto" alt="">
+            <span class="h5">@Model.FanFiction.User.UserName</span>
+        </a>
+        <div class="form-group" >
+            <p class="h5">Фэндом:</p>
+            <a href="#" style="font-size: 15px;" class="badge badge-info">@Model.FanFiction.Fandom.Name</a>
+        </div>
+        <form class="" method="get" asp-controller="FanFiction">
+            <input type="hidden" name="id" value="@Model.FanFiction.Id"/>
+            <div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (@Model.FanFiction.UserRating.Any(i => i.UserId == User.Claims.ElementAt(0).Value))
+                    {
+                        <a style="cursor: pointer;" onclick="RemoveLike(@Model.FanFiction.Id)">
+                            <img style="max-width: 20px;padding-bottom: 6px;" src="~/img/unlike.svg" />
+                        </a>
+                        <span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                    }
+                    else
+                    {
+                        <a style="cursor: pointer;" onclick="SetLike(@Model.FanFiction.Id)">
+                            <img style="max-width: 20px;padding-bottom: 6px;" src="~/img/like.svg"/>
+                        </a>
+                        <span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                    }
+                }
+                else
+                {
+                    <img style="max-width: 20px;padding-bottom: 6px;margin-right: 6px" src="~/img/like.svg"/><span style="font-size: 20px">@Model.FanFiction.UserRating.Count</span>
+                }
+            </div>
+        </form>
+        <br/>
+        <div id="editor"></div>
+        <div class="form-group">
+            @if (@Model.FanFiction.Photo != null)
+            {
+                <div class="card border-white mt-1">
+                    <img src="@Model.FanFiction.Photo" id="img-preview" value=""/>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-7 text-right">
+        <div>
+            @if (User.IsInRole("Admin") && Model.FanFiction.Moderation != null && Model.FanFiction.Moderation.Status.Id != 5)
+            {
+                <div class="btn-group">
+                    <a onclick="BlockFanFiction(@Model.FanFiction.Id)" href="#" class="btn btn-danger shadow-sm rounded btn-block">Заблокировать</a>
+                </div>
+            }
+            @if (User.Identity.IsAuthenticated && User.Claims.ElementAt(0).Value == Model.FanFiction.UserId)
+            {
+
+
+                @if (Model.FanFiction.Moderation == null)
+                {
+                    <div class="btn-group">
+                        <a onclick="PublicationFanFiction(@Model.FanFiction.Id)" href="#" class="btn btn-primary shadow-sm rounded btn-block">Опубликовать</a>
+                    </div>
+                }
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Управление
+                    </button>
+                    <div class="dropdown-menu">
+                        <a asp-controller="FanFiction" asp-action="EditFanFiction" asp-route-id="@Model.FanFiction.Id" class="dropdown-item">Редактировать</a>
+                        <a href="/FanFiction/AddChapter/@Model.FanFiction.Id" class="dropdown-item">Добавить главу</a>
+                        <a onclick="RemoveFanFiction(@Model.FanFiction.Id)" href="#" class="dropdown-item">Удалить</a>
+                    </div>
+                </div>
+            }
+        </div>
+        </div>
+
+</div>
+<div class="row bg-secondary shadow p-3 mb-5 bg-white rounded mt-5">
+    <div>
+        <h4 class="disabley-5">Главы :</h4>
+
+             @if (ViewBag.Chapters.Count > 0)
+             {
+                 @for (int i = 0; i < ViewBag.Chapters.Count; i++)
+                    {
+                        <p class="mb-2">
+                        <a class="btn btn-primary mt-1 mb-1" href="/ReadFanFiction/@Model.FanFiction.Id/@ViewBag.Chapters[i].Id" aria-controls="nav-contact" aria-selected="false">@ViewBag.Chapters[i].Name</a>
+                        </p>
+                    }
+             }
+             else
+             {
+                 <a class="text-primary">Нет ни одной главы</a>
+             }
+
+    </div>
+</div>
+
+@if (Model.FanFiction.Moderation != null && @Model.FanFiction.Moderation.Status.Name == StatusesConstants.ApprovedStatus)
+{
+    <div class="row">
+    <div class="col-lg-12 bg-secondary shadow p-3 mb-5 bg-white rounded mt-5">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form method="post" asp-action="AddComment" asp-controller="FanFiction">
+                <input type="hidden" name="FanFictionId" value=@Model.FanFiction.Id />
+                <div class="form-group">
+                    <label for="CommentBody">Ваш комментарий</label>
+                    <textarea type="text" style="resize:none" class="form-control" name="CommentBody" id="CommentBody" rows="8" placeholder="Ваш комментарий"></textarea>
+                    @Html.ValidationMessageFor(model => model.Comment.CommentBody, "", new {@class = "text-danger"})
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                <strong>Ой!</strong> Войдите в аккаунт чтобы оставлять комментарии.
+            </div>
+        }
+    </div>
+    </div>
+}
+
+@if (ViewBag.Comments.Count != 0)
+{
+    <div class="row">
+        <div class="col-lg-12 bg-secondary shadow p-3 mb-5 bg-white rounded mt-2">
+            @foreach (var item in ViewBag.Comments)
+            {
+                <div class="col-11 col-md-12 bg-secondary shadow p-3 mb-5 bg-white rounded">
+                    <div class="row border-bottom">
+                        <div class="col-9">
+                            <a class="text-dark text-decoration-none" href="#">
+                                <img class="rounded-circle im_nav_avatar_photo" style="width: 50px; height: 50px" src=@item.User.UserPhoto>
+                                <span class="font-weight-bold"><a style="text-decoration: none; color: #000 !important;" href="/Profile/UserProfile/@item.User.Id">@item.User.UserName</a></span>
+                            </a>
+                        </div>
+                        <div class="col-3 text-right">
+                            <span class="text-right text-muted">@item.SendingTime.ToString()</span>
+                        </div>
+                    </div>
+
+                    <br class="br">
+                    <p>@item.CommentBody</p>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+</div>
+<script>
+$( document ).ready(function() {
+     $('#editor').html( $("#editor").html('@Model.FanFiction.ShortDescription').text()).contents();
+}); 
+</script>

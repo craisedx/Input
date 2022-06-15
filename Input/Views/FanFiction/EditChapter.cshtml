@@ -1,0 +1,78 @@
+﻿@model Input.ViewModels.Chapter.ChapterViewModel
+
+@{ ViewData["Title"] = "Редактирование главы"; }
+
+<div class="container mt-5">
+    <div class="row bg-secondary shadow p-3 mb-5 bg-white rounded m-2">
+        <form enctype="multipart/form-data" method="post" action="/FanFiction/EditChapter" asp-anti-forgery="true">
+            <div class="col-12 col-md-5">
+                <h2 class="display-5">Редактирование главы</h2>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="FanFictionId" value="@ViewBag.FanFictionId"/>
+                <input type="hidden" asp-for="Id" value="@Model.Id">
+                <div class="form-group">
+                    <div class="card border-white mt-1" style="max-width:400px">
+                        @if (@Model.Photo != null)
+                        {
+                            <img src="@Model.Photo" id="img-preview" value=""/>
+                        }
+                        else
+                        {
+                            <img src="" id="img-preview" value=""/>
+                        }
+                    </div>
+                    <label asp-for="Photo"></label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label form-control shadow-sm bg-white rounded" for="customFile">Выбрать файл</label>
+                        <input type="hidden" id="file-upload-url" value="@Model.Photo" asp-for="Photo"/>
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input class="form-control shadow-sm bg-white rounded" name="Name" value="@Model.Name" placeholder="Введите название">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="pl-3">
+                            <textarea id="editor" rows="10" name="ChapterBody" cols="30" style="width:98%; height:560px" aria-label="editor">@Model.ChapterBody
+                            </textarea>
+                            <span asp-validation-for="ChapterBody" class="text-danger"></span>
+                        </div>
+                        <br/>
+                        <div class="col-md-5">
+                            <button type="submit" class="btn btn-primary shadow-sm rounded btn-block">Сохранить</button>
+                        </div>
+        </form>
+    </div>
+</div>
+<script>
+$(document).ready(function () {
+    $("#editor").kendoEditor({
+    encoded: false,
+    resizable: {
+        content: false,
+        toolbar: true
+    },
+    tools: [
+        "bold",
+        "italic",
+        "underline",
+        "undo",
+        "redo",
+        "justifyLeft",
+        "justifyCenter",
+        "justifyRight",
+        "insertUnorderedList",
+        "insertOrderedList",
+        "formatting",
+        "cleanFormatting",
+        "fontName",
+        "fontSize",
+        "foreColor",
+        "backColor"
+    ]
+    });
+});
+</script>

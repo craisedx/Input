@@ -1,0 +1,52 @@
+﻿@model List<Input.ViewModels.FanFiction.FanFictionViewModel>
+
+@{
+    ViewData["Title"] = $"Модерация";
+}
+
+<nav>
+    <div class="nav nav-tabs mb-5 d-flex justify-content-center" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" asp-action="FreePosts" aria-controls="nav-contact" aria-selected="false">Ожидающие проверки</a>
+        <a class="nav-item nav-link" asp-action="AdminPosts" aria-controls="nav-contact" aria-selected="false">На вас</a>
+        <a class="nav-item nav-link" asp-action="AllPosts" aria-controls="nav-contact" aria-selected="false">Все</a>
+    </div>
+</nav>
+
+<div class="container">
+<div class="container col-lg-12 mt-5">
+        <table class="table table-hover">
+            <thead class="th-color">
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Кто создал</th>
+                <th scope="col">Тема</th>
+                <th style="width: 180px"></th>
+                <th style="width: 180px"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in @Model)
+                {
+                <tr>
+                    <td>
+                        <a class="remove-blue-href" href="/ReadFanFiction/@item.Id">@item.Name</a>
+                    </td>
+                    <td>
+                        <a class="remove-blue-href" asp-action="UserProfile" asp-controller="Profile" asp-route-id="@item.User.Id">@item.User.UserName</a>
+                    </td>
+                    <td>@item.Fandom.Name</td>
+                    <td>
+                        <a class="btn btn-outline-primary" onclick="window.location.href ='/ReadFanFiction/@item.Id';">Посмотреть</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-success" onclick="SetAdminCheck(@item.Id)">Взять на себя</a>
+                    </td>
+                </tr>
+                }
+            }
+            </tbody>
+        </table>
+</div>
+</div>

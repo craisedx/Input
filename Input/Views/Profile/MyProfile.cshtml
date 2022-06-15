@@ -1,0 +1,215 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = $"Профиль {Model.UserName}";
+}
+
+<div id="profile" class="container bg-white rounded mt-3 shadow pt-3">
+    <div class="row">
+        <div class="col-lg-2 pl-3">
+            <a href="@Model.UserPhoto" data-toggle="lightbox" data-title="@Model.UserName">
+                <img class="rounded-circle" src="@Model.UserPhoto" alt="avatar" style="width: 150px; height: 150px; object-fit:cover;">
+            </a>
+        </div>
+        <div class="col-lg-6 pt-3">
+            <h1 class="h2">@Model.UserName</h1>
+            <div>
+                <p class="h3"> Роль:
+                @if (ViewBag.IsAdmin)
+                {
+                    <a href="#" class="badge badge-danger">Администратор</a>
+                }
+                else
+                {
+                    <a href="#" class="badge badge-info">Пользователь</a>
+                }
+                </p>
+            </div>
+        </div>
+        @if (User.Identity.IsAuthenticated && Model.Id == User.Claims.ElementAt(0).Value)
+        {
+            <div class="col-lg-4 text-right">
+                <a class="btn btn-outline-warning align-self-start" asp-controller="Profile" asp-action="EditProfile" asp-route-id="@Model.Id">Редактировать</a>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-lg-12 mt-3 pt-3 pb-1">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link btn-block rounded active" data-toggle="tab" href="#fanFictions">Опубликованные произведения</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link btn-block rounded" data-toggle="tab" href="#fanFictionsStatuses">На модерации</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link btn-block rounded" data-toggle="tab" href="#fanFictionsAwaitingPublications">Ожидающие публикации</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link rounded" data-toggle="tab" href="#likes">Понравившиеся</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link rounded" data-toggle="tab" href="#comments">Комментарии</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="fanFictions" class="tab-pane fade show active mt-3">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Лайки</th>
+                            <th scope="col" style="width: 50px"></th>
+                            <th scope="col" style="width: 50px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in ViewBag.UserFanFictions)
+                        {
+                            <tr>
+                                <th>
+                                    <a href="/ReadFanFiction/@item.Id" style="text-decoration: none; color: #000 !important;">@item.Name</a>
+                                </th>
+                                <td>@item.UserRating.Count</td>
+                                <td>
+                                    <a asp-controller="FanFiction" asp-action="EditFanFiction" asp-route-id="@item.Id" class="btn btn-warning">Редактировать</a>
+                                </td>
+                                <td>
+                                    <a onclick="RemoveFanFiction(@item.Id)" class="btn btn-danger">Удалить</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <div id="fanFictionsStatuses" class="tab-pane fade mt-3">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Состояние</th>
+                            <th scope="col">Администратор</th>
+                            <th scope="col">Комментарий</th>
+                            <th scope="col" style="width: 50px"></th>
+                            <th scope="col" style="width: 50px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in ViewBag.AwaitingModerationsFanFictions)
+                        {
+                            <tr>
+                                <th>
+                                    <a href="/ReadFanFiction/@item.Id" style="text-decoration: none; color: #000 !important;">@item.Name</a>
+                                </th>
+                                <td>@item.Moderation.Status.Name</td>
+                                @if (item.Moderation.User != null)
+                                {
+                                    <td>@item.Moderation.User.UserName</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                <td>@item.Moderation.Message</td>
+                                <td>
+                                    <a asp-controller="FanFiction" asp-action="EditFanFiction" asp-route-id="@item.Id" class="btn btn-warning">Редактировать</a>
+                                </td>
+                                <td>
+                                    <a onclick="RemoveFanFiction(@item.Id)" class="btn btn-danger">Удалить</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <div id="fanFictionsAwaitingPublications" class="tab-pane fade mt-3">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col" style="width: 50px"></th>
+                            <th scope="col" style="width: 50px"></th>
+                            <th scope="col" style="width: 50px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in ViewBag.AwaitingPublicationsFanFictions)
+                        {
+                            <tr>
+                                <th>
+                                    <a href="/ReadFanFiction/@item.Id" style="text-decoration: none; color: #000 !important;">@item.Name</a>
+                                </th>
+                                <td>
+                                    <a onclick="PublicationFanFiction(@item.Id)" class="btn btn-primary">Опубликовать</a>
+                                </td>
+                                <td>
+                                    <a asp-controller="FanFiction" asp-action="EditFanFiction" asp-route-id="@item.Id" class="btn btn-warning">Редактировать</a>
+                                </td>
+                                <td>
+                                    <a onclick="RemoveFanFiction(@item.Id)" class="btn btn-danger">Удалить</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <div id="likes" class="tab-pane fade mt-3">
+                    <div class="row justify-content-center">
+                        @foreach (var item in ViewBag.UserLikes)
+                        {
+                            <div class="col-6 col-md-3 bg-secondary shadow p-3 mb-5 bg-white rounded m-2">
+                                <a href="/ReadFanFiction/@item.FanFiction.Id">
+                                    <img src="@item.FanFiction.Photo" class="img-thumbnail responsive" alt="...">
+                                </a>
+                                <a href="/ReadFanFiction/@item.FanFiction.Id" class="remove-blue-href">
+                                    <h4 class="display-5 long-name">@item.FanFiction.Name</h4>
+                                </a>
+                                <a>
+                                    <h5 class="display-5" style="color: #2f224d"><img style="max-width: 16px" src="~/img/user.svg"/>@item.FanFiction.User.UserName</h5>
+                                </a>
+                                <a>
+                                    <h5 class="display-5"><span class="badge badge-info">@item.FanFiction.Fandom.Name</span></h5>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="comments" class="tab-pane fade mt-3">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Комментарий</th>
+                            <th scope="col">Дата отправки</th>
+                            <th scope="col" style="width: 50px"></th>
+                            <th scope="col" style="width: 50px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in ViewBag.Comments)
+                        {
+                            <tr>
+                                <th>
+                                    <a href="/ReadFanFiction/@item.FanFiction.Id" style="text-decoration: none; color: #000 !important;">@item.FanFiction.Name</a>
+                                </th>
+                                <td>
+                                    <a>@item.CommentBody</a>
+                                </td>
+                                <td>
+                                    <a>@item.SendingTime.ToString("g")</a>
+                                </td>
+                                <td>
+                                    <a href="/ReadFanFiction/@item.FanFiction.Id" class="btn btn-primary">Перейти к посту</a>
+                                </td>
+                                <td>
+                                    <a onclick="RemoveComment(@item.Id)" href="#" class="btn btn-danger">Удалить</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

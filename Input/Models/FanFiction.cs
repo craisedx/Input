@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Input.Models
 {
@@ -14,17 +15,18 @@ namespace Input.Models
         public string Name { get; set; }
         
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(3000)]
         public string ShortDescription { get; set; }
         
         [Required]
         public Fandom Fandom { get; set; }
         public int FandomId { get; set; }
         
-        [Required]
         public Moderation Moderation { get; set; }
-        public int ModerationId { get; set; }
+        public int? ModerationId { get; set; }
         
         public string Photo { get; set; }
+        
+        public List<UserRating> UserRating { get; set; }
     }
 }
